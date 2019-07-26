@@ -1,0 +1,20 @@
+{
+  "RIXS-simulator.title": {
+    "value": "RIXS Simulator"
+  },
+  "kEdge": {
+    "value": "Cu K edge"
+  },
+  "lEdge": {
+    "value": "Cu L3 edge"
+  },
+  "mEdge": {
+    "value": "Cu M1 edge"
+  },
+  "photonEnergy": {
+    "value": "Photon<br>Energy"
+  },
+  "energyUnits": {
+    "value": "eV"
+  }
+}
