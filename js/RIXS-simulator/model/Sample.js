@@ -18,17 +18,20 @@ define( function( require ) {
   /**
    * Create a new sample crystal model. The mutable lattice constants (Assumed orthorhombic for now) and orientation.
    *
-   * @param {Vector3} LatticeConstants - the lattice constants of the sample in angstrom
+   * @param {Vector3} latticeConstants - the lattice constants of the sample in angstrom
    * @param {number} orientation - Theta, // phi, (and third as a ToDo) in radians
    * @constructor
    */
   function Sample( latticeConstants, orientation, tandem ) {
 
-    // @public {Vector2} position of the sample on the screen
-    //this.positionP = position;
+    this.anglePhiProperty = new NumberProperty(0, {
+      tandem: tandem.createTandem( 'anglePhiProperty' )
+    } );
     
     // @public {Vector3} the Lattice Constants of the sample (a, b, c)
-    this.latticeConstants = latticeConstants;
+    this.latticeConstantsP = new NumberProperty( latticeConstants, {
+      tandem: tandem.createTandem( 'latticeConstantsP' )
+    } );
 
     // @public {number} the orientation in radians relative to the incoming light
     this.orientationP =  new NumberProperty( orientation, {
@@ -48,6 +51,7 @@ define( function( require ) {
     reset: function() {
       //this.latticeConstants.reset();
       this.orientationP.reset();
+      this.anglePhiProperty.reset();
       //this.position.reset();
       //this.orientationP = this.orientationP._initialValue; 
     }
