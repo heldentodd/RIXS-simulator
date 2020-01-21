@@ -48,7 +48,7 @@ define( function( require ) {
 
     // on click, open webpage
     var synchrotronListener = new FireListener( {
-      fire: function () {open('http://www.google.com')}
+      fire: function () {open('synchrotron.html')}
     } );
     this.addInputListener( synchrotronListener );
   

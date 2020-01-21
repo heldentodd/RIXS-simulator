@@ -21,6 +21,10 @@ define( require => {
       default: 'black',
       projector: 'white'
     },
+    backgroundColor: {
+      default: new Color( 100, 100, 100 ),
+      projector: new Color( 255, 255, 255 )
+    },
     panelStroke: {
       default: 'white',
       projector: 'black'
@@ -60,6 +64,10 @@ define( require => {
     temperatureText: {
       default: Color.YELLOW,
       projector: Color.BLUE
+    },
+    photonBeamColor: {
+      default: new Color( 143, 143, 143, 0.4 ),
+      projector: new Color( 143, 143, 143, 0.4 )
     },
     triangleStroke: {
       default: 'white',

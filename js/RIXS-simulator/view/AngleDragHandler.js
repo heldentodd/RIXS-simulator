@@ -10,7 +10,6 @@ define( function( require ) {
   'use strict';
 
   var inherit = require( 'PHET_CORE/inherit' );
-  //var moleculePolarity = require( 'MOLECULE_POLARITY/moleculePolarity' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -19,12 +18,9 @@ define( function( require ) {
    * @param {Node} relativeNode - angles are computed relative to this Node
    * @constructor
    */
-  function AngleDragHandler( ImageNode, relativeNode, model ) {
+  function AngleDragHandler( ImageNode, rotationCenter, modelangleP ) {
 
-    const r = new Vector2(ImageNode.centerX - relativeNode.centerX, ImageNode.centerY - relativeNode.centerY ).magnitude;
-    const originalX = relativeNode.centerX;
-    const originalY = relativeNode.centerY;
-
+    const r = new Vector2(ImageNode.centerX - rotationCenter.x, ImageNode.centerY - rotationCenter.y ).magnitude;
     var previousAngle; // angle between the pointer and the ImageNode when the drag started
 
     /**
@@ -33,10 +29,8 @@ define( function( require ) {
      * @returns {number} angle in radians
      */
     var getAngle = function( event ) {
-      var point = (relativeNode.globalToParentPoint( event.pointer.point ) );
-      //console.log(ImageNode.centerX);
-      //return new Vector2( point.x , point.y ).angle;
-      return new Vector2( point.x - relativeNode.centerX, point.y - relativeNode.centerY ).angle;
+      var point = (ImageNode.globalToParentPoint( event.pointer.point ) );
+      return new Vector2( point.x - rotationCenter.x, point.y - rotationCenter.y ).angle;
     };
 
     SimpleDragHandler.call( this, {
@@ -50,14 +44,13 @@ define( function( require ) {
 
       drag: function( event ) {
         var currentAngle = getAngle( event );
-        //ImageNode.rotation = ImageNode.rotation + currentAngle - previousAngle ;
         ImageNode.rotation = ImageNode.rotation + currentAngle - previousAngle ;
-        ImageNode.centerX = originalX + r * Math.cos(currentAngle);
-        ImageNode.centerY = originalY + r * Math.sin(currentAngle);
-        var currentTheta = model.Sample.orientationP.value - currentAngle + previousAngle ;
-        if ( currentTheta < -Math.PI ) {currentTheta += 2 * Math.PI } 
-        else if ( currentTheta > Math.PI ) {currentTheta -= 2 * Math.PI }
-        model.Sample.orientationP.value = currentTheta;
+        ImageNode.centerX = rotationCenter.x - r * Math.sin(ImageNode.rotation);
+        ImageNode.centerY = rotationCenter.y + r * Math.cos(ImageNode.rotation);
+        modelangleP.value = modelangleP.value - currentAngle + previousAngle ;
+        if ( modelangleP.value < 0 ) {modelangleP.value += 2 * Math.PI } 
+        else if ( modelangleP.value > 2 * Math.PI ) {modelangleP.value -= 2 * Math.PI }
+  //      console.log(ImageNode.centerX, ImageNode.centerY, r, modelangleP.value*180/Math.PI);
         previousAngle = currentAngle ;
       },
 

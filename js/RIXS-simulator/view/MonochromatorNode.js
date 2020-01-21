@@ -17,7 +17,7 @@ define( function( require ) {
   const FireListener = require( 'SCENERY/listeners/FireListener' );
 
   // images
-  const MonochromatorImage = require( 'image!RIXS_SIMULATOR/Monochromator.png' );
+  const MonochromatorImage = require( 'image!RIXS_SIMULATOR/monochromator.png' );
 
   /**
    * Constructor for the MonochromatorNode which renders the Monochromator as a scenery node.
@@ -49,7 +49,7 @@ define( function( require ) {
 
     // on click, open webpage
     var MonochromatorListener = new FireListener( {
-      fire: function () {open('http://www.google.com')}  
+      fire: function () {open('Monochromator.html')}  
     } );
     this.addInputListener( MonochromatorListener );
   

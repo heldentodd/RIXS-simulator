@@ -67,19 +67,6 @@ define( function( require ) {
 
     // Create a shaded sphere to act as the bulb fluid
     var bulbFluidDiameter = options.bulbDiameter - options.lineWidth - options.glassThickness; //TODO should this be options.lineWidth/2 ?
-    var bulbFluidNode = new ShadedSphereNode( bulbFluidDiameter, {
-      centerX: BULB_CENTER_X,
-      centerY: BULB_CENTER_Y,
-      mainColor: options.fluidMainColor,
-      highlightColor: options.fluidHighlightColor,
-      highlightXOffset: -0.2,
-      highlightYOffset: 0.2,
-      rotation: Math.PI / 2
-    } );
-
-    // Angles for the outline of the bulb
-    var bulbStartAngle = -Math.acos( options.tubeWidth / options.bulbDiameter );
-    var bulbEndAngle = Math.PI - bulbStartAngle;
 
     // Create the outline for the thermometer, starting with the bulb
     var tubeTopRadius = options.tubeWidth / 2;
@@ -88,17 +75,17 @@ define( function( require ) {
     var straightTubeLeft = BULB_CENTER_X - ( options.tubeWidth / 2 );
 
     var outlineShape = new Shape()
-      .arc( BULB_CENTER_X, BULB_CENTER_Y, options.bulbDiameter / 2, bulbStartAngle, bulbEndAngle ) // bulb at bottom
-      .arc( BULB_CENTER_X, straightTubeTop, tubeTopRadius, Math.PI, 0 ) // rounded top of tube
-      .close();
-
+      .moveTo(straightTubeLeft, BULB_CENTER_Y )
+      .lineTo(straightTubeLeft, BULB_CENTER_Y - straightTubeHeight - options.bulbDiameter )
+      /*.close()*/;
+   
     var outlineNode = new Path( outlineShape, {
       stroke: options.outlineStroke,
       lineWidth: options.lineWidth
     } );
     assert && assert( outlineNode.height === options.tubeHeight + options.bulbDiameter + options.lineWidth ); // see scenery-phet#136
 
-    var tubeFluidWidth = options.tubeWidth - options.lineWidth - options.glassThickness; //TODO should this be options.lineWidth/2 ?
+    var tubeFluidWidth = options.tubeWidth * 2 - options.lineWidth - options.glassThickness; //TODO should this be options.lineWidth/2 ?
     var tubeFluidRadius = tubeFluidWidth / 2;
     var clipBulbRadius = ( options.bulbDiameter - options.lineWidth - options.glassThickness ) / 2; //TODO should this be options.lineWidth/2 ?
     var clipStartAngle = -Math.acos( tubeFluidRadius / clipBulbRadius );
@@ -113,15 +100,6 @@ define( function( require ) {
       .lineTo( -tubeFluidLeft, tubeFluidBottom + FLUID_OVERLAP )
       .close();
 
-    // Clip the top of the bulb so it's flat where it connects to the tube
-    var bulbFluidClipArea = Shape.rectangle(
-      tubeFluidBottom,
-      BULB_CENTER_Y - options.bulbDiameter / 2,
-      options.bulbDiameter,
-      options.bulbDiameter
-    );
-    bulbFluidNode.setClipArea( bulbFluidClipArea );
-
     // Gradient for fluid in tube
     var tubeFluidGradient = new LinearGradient( tubeFluidLeft, 0, tubeFluidLeft + tubeFluidWidth, 0 )
       .addColorStop( 0, options.fluidMainColor )
@@ -132,7 +110,7 @@ define( function( require ) {
     // Fluid in the tube (correct size set later)
     var tubeFluidNode = new Rectangle( 0, 0, tubeFluidWidth, 0, {
       fill: tubeFluidGradient,
-      clipArea: fluidClipArea
+      //clipArea: fluidClipArea
     } );
 
     // override tick spacing options when using tickSpacingEnergy
@@ -144,7 +122,7 @@ define( function( require ) {
     }
 
     // tick marks, from bottom up, alternating major and minor ticks
-    for ( var i = 0; i * options.tickSpacing + offset <= straightTubeHeight; i++ ) {
+    for ( var i = -1; i * options.tickSpacing + offset <= straightTubeHeight + offset + 1 ; i++ ) {
       outlineShape.moveTo(
         straightTubeLeft,
         tubeFluidBottom - ( i * options.tickSpacing ) - offset
@@ -162,7 +140,7 @@ define( function( require ) {
     // Add other nodes after optional background
     this.addChild( tubeFluidNode );
    // this.addChild( bulbFluidNode );
-   // this.addChild( outlineNode ); // need this for the scale!
+    this.addChild( outlineNode ); // need this for the scale!
 
     // Energy determines the height of the fluid in the tube
     var maxFluidHeight = new Path( fluidClipArea ).height;

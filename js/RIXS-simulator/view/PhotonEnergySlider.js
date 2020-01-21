@@ -50,9 +50,9 @@ define( require => {
       options = _.extend( {
         minEnergy: RIXSConstants.minEnergy,
         maxEnergy: RIXSConstants.maxEnergy,
-        bulbDiameter: 35,
-        tubeWidth: 20,
-        tubeHeight: 400,
+        bulbDiameter: 20,
+        tubeWidth: 10,
+        tubeHeight: 200,
         majorTickLength: 10,
         minorTickLength: 5,
         glassThickness: 3,
@@ -138,7 +138,7 @@ define( require => {
       const energy = TICK_MARKS[ tickMarkIndex ].energy;
 
       const objectHeight = -this.energyToYPos( energy );
-      const tickMarkLength = options.tubeWidth * 0.5;
+      const tickMarkLength = options.tubeWidth * 2;
 
       const shape = new Shape();
       shape.moveTo( options.tubeWidth / 2, objectHeight ).horizontalLineToRelative( tickMarkLength );
