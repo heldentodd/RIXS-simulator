@@ -7,20 +7,18 @@
  * @author Sam Reid
  * @author Chris Malley (PixelZoom, Inc.)
  */
-define( function( require ) {
-  'use strict';
 
-  // modules
-  const inherit = require( 'PHET_CORE/inherit' );
-  const InstanceRegistry = require( 'PHET_CORE/documentation/InstanceRegistry' );
-  const LinearFunction = require( 'DOT/LinearFunction' );
-  const LinearGradient = require( 'SCENERY/util/LinearGradient' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const Path = require( 'SCENERY/nodes/Path' );
-  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const sceneryPhet = require( 'SCENERY_PHET/sceneryPhet' );
-  const ShadedSphereNode = require( 'SCENERY_PHET/ShadedSphereNode' );
-  const Shape = require( 'KITE/Shape' );
+ // modules
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import merge from '../../../../phet-core/js/merge.js';
+  import InstanceRegistry from '../../../../phet-core/js/documentation/InstanceRegistry.js';
+  import LinearFunction from '../../../../dot/js/LinearFunction.js';
+  import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
+  import Node from '../../../../scenery/js/nodes/Node.js';
+  import Path from '../../../../scenery/js/nodes/Path.js';
+  import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import Shape from '../../../../kite/js/Shape.js';
 
   // constants
   const FLUID_OVERLAP = 1; // overlap of fluid in tube and bulb, to hide seam
@@ -36,9 +34,9 @@ define( function( require ) {
    * @constructor
    */
   function ThermometerNode( minEnergy, maxEnergy, energyProperty, options ) {
-    var self = this;
+    const self = this;
 
-    options = _.extend( {
+    options = merge( {
       bulbDiameter: 50,
       tubeWidth: 30,
       tubeHeight: 100,
@@ -66,63 +64,63 @@ define( function( require ) {
       'Invalid zeroLevel: ' + options.zeroLevel );
 
     // Create a shaded sphere to act as the bulb fluid
-    var bulbFluidDiameter = options.bulbDiameter - options.lineWidth - options.glassThickness; //TODO should this be options.lineWidth/2 ?
+    const bulbFluidDiameter = options.bulbDiameter - options.lineWidth - options.glassThickness; //TODO should this be options.lineWidth/2 ?
 
     // Create the outline for the thermometer, starting with the bulb
-    var tubeTopRadius = options.tubeWidth / 2;
-    var straightTubeHeight = options.tubeHeight - tubeTopRadius;
-    var straightTubeTop = BULB_CENTER_Y - ( options.bulbDiameter / 2 ) - straightTubeHeight;
-    var straightTubeLeft = BULB_CENTER_X - ( options.tubeWidth / 2 );
+    const tubeTopRadius = options.tubeWidth / 2;
+    const straightTubeHeight = options.tubeHeight - tubeTopRadius;
+    const straightTubeTop = BULB_CENTER_Y - ( options.bulbDiameter / 2 ) - straightTubeHeight;
+    const straightTubeLeft = BULB_CENTER_X - ( options.tubeWidth / 2 );
 
-    var outlineShape = new Shape()
+    const outlineShape = new Shape()
       .moveTo(straightTubeLeft, BULB_CENTER_Y )
       .lineTo(straightTubeLeft, BULB_CENTER_Y - straightTubeHeight - options.bulbDiameter )
       /*.close()*/;
    
-    var outlineNode = new Path( outlineShape, {
+    const outlineNode = new Path( outlineShape, {
       stroke: options.outlineStroke,
       lineWidth: options.lineWidth
     } );
     assert && assert( outlineNode.height === options.tubeHeight + options.bulbDiameter + options.lineWidth ); // see scenery-phet#136
 
-    var tubeFluidWidth = options.tubeWidth * 2 - options.lineWidth - options.glassThickness; //TODO should this be options.lineWidth/2 ?
-    var tubeFluidRadius = tubeFluidWidth / 2;
-    var clipBulbRadius = ( options.bulbDiameter - options.lineWidth - options.glassThickness ) / 2; //TODO should this be options.lineWidth/2 ?
-    var clipStartAngle = -Math.acos( tubeFluidRadius / clipBulbRadius );
-    var clipEndAngle = Math.PI - clipStartAngle;
-    var tubeFluidBottom = ( bulbFluidDiameter / 2 ) * Math.sin( clipEndAngle );
-    var tubeFluidLeft = -tubeFluidRadius;
+    const tubeFluidWidth = options.tubeWidth * 2 - options.lineWidth - options.glassThickness; //TODO should this be options.lineWidth/2 ?
+    const tubeFluidRadius = tubeFluidWidth / 2;
+    const clipBulbRadius = ( options.bulbDiameter - options.lineWidth - options.glassThickness ) / 2; //TODO should this be options.lineWidth/2 ?
+    const clipStartAngle = -Math.acos( tubeFluidRadius / clipBulbRadius );
+    const clipEndAngle = Math.PI - clipStartAngle;
+    const tubeFluidBottom = ( bulbFluidDiameter / 2 ) * Math.sin( clipEndAngle );
+    const tubeFluidLeft = -tubeFluidRadius;
 
     // Clip area for the fluid in the tube, round at the top
-    var fluidClipArea = new Shape()
+    const fluidClipArea = new Shape()
       .moveTo( tubeFluidLeft, tubeFluidBottom + FLUID_OVERLAP )
       .arc( BULB_CENTER_X, straightTubeTop, tubeFluidRadius, Math.PI, 0 ) // round top
       .lineTo( -tubeFluidLeft, tubeFluidBottom + FLUID_OVERLAP )
       .close();
 
     // Gradient for fluid in tube
-    var tubeFluidGradient = new LinearGradient( tubeFluidLeft, 0, tubeFluidLeft + tubeFluidWidth, 0 )
+    const tubeFluidGradient = new LinearGradient( tubeFluidLeft, 0, tubeFluidLeft + tubeFluidWidth, 0 )
       .addColorStop( 0, options.fluidMainColor )
       .addColorStop( 0.4, options.fluidHighlightColor )
       .addColorStop( 0.5, options.fluidHighlightColor )
       .addColorStop( 1, options.fluidMainColor );
 
     // Fluid in the tube (correct size set later)
-    var tubeFluidNode = new Rectangle( 0, 0, tubeFluidWidth, 0, {
-      fill: tubeFluidGradient,
+    const tubeFluidNode = new Rectangle( 0, 0, tubeFluidWidth, 0, {
+      fill: tubeFluidGradient
       //clipArea: fluidClipArea
     } );
 
     // override tick spacing options when using tickSpacingEnergy
-    var offset = options.tickSpacing;
+    let offset = options.tickSpacing;
     if ( options.tickSpacingEnergy !== null ) {
-      var scaleTempY = ( options.tubeHeight + options.lineWidth ) / ( maxEnergy - minEnergy );
+      const scaleTempY = ( options.tubeHeight + options.lineWidth ) / ( maxEnergy - minEnergy );
       offset = ( options.tickSpacingEnergy - ( minEnergy % options.tickSpacingEnergy ) ) * scaleTempY;
       options.tickSpacing = options.tickSpacingEnergy * scaleTempY;
     }
 
     // tick marks, from bottom up, alternating major and minor ticks
-    for ( var i = -1; i * options.tickSpacing + offset <= straightTubeHeight + offset + 1 ; i++ ) {
+    for ( let i = -1; i * options.tickSpacing + offset <= straightTubeHeight + offset + 1 ; i++ ) {
       outlineShape.moveTo(
         straightTubeLeft,
         tubeFluidBottom - ( i * options.tickSpacing ) - offset
@@ -143,10 +141,10 @@ define( function( require ) {
     this.addChild( outlineNode ); // need this for the scale!
 
     // Energy determines the height of the fluid in the tube
-    var maxFluidHeight = new Path( fluidClipArea ).height;
+    const maxFluidHeight = new Path( fluidClipArea ).height;
     //TODO this can exceed max/min. should this be clamped? or should it be replaced by dot.Util.linear?
 
-    var minFluidHeight;
+    let minFluidHeight = 0;
     if ( options.zeroLevel === 'bulbCenter' ) {
       minFluidHeight = 0;
     }
@@ -165,8 +163,8 @@ define( function( require ) {
       maxFluidHeight + minFluidHeight
     );
 
-    var energyPropertyObserver = function( temp ) {
-      var fluidHeight = self.energyToYPos( temp );
+    const energyPropertyObserver = function( temp ) {
+      const fluidHeight = self.energyToYPos( temp );
       tubeFluidNode.visible = ( fluidHeight > 0 );
       tubeFluidNode.setRect(
         tubeFluidLeft,
@@ -191,9 +189,9 @@ define( function( require ) {
     assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL( 'scenery-phet', 'ThermometerNode', this );
   }
 
-  sceneryPhet.register( 'ThermometerNode', ThermometerNode );
+  rixsSimulator.register( 'ThermometerNode', ThermometerNode );
 
-  return inherit( Node, ThermometerNode, {
+  inherit( Node, ThermometerNode, {
 
     /**
      * Ensures that this node is subject to garbage collection
@@ -222,4 +220,5 @@ define( function( require ) {
       return this.energyLinearFunction.inverse( y );
     }
   } );
-} );
+
+  export default ThermometerNode;

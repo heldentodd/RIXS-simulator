@@ -1,15 +1,11 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2020, University of Colorado Boulder
 
 /**
  * Creates the namespace for this simulation.
  *
- * @author Todd Holden (Queensborough Community College of CUNY)
+ * @author Todd Holden
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const Namespace = require( 'PHET_CORE/Namespace' );
+import Namespace from '../../phet-core/js/Namespace.js';
 
-  return new Namespace( 'rixsSimulator' );
-} );
+export default new Namespace( 'rixsSimulator' );

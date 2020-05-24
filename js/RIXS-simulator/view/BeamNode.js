@@ -5,15 +5,13 @@
  *
  * @author Dave Schmitz (Schmitzware)
  */
-define( function( require ) {
-  'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const RIXSConstants = require( 'RIXS_SIMULATOR/RIXSConstants' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import merge from '../../../../phet-core/js/merge.js';
+  import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+
   /**
    * @param {Property.<boolean>} visibleProperty - is the beam visible?
    * @param {Object} [options]
@@ -21,7 +19,7 @@ define( function( require ) {
    */
   function BeamNode( visibleProperty, options ) {
 
-    options = _.extend( {
+    options = merge( {
       fill: '#8f8f8f'
     }, options );
 
@@ -33,6 +31,6 @@ define( function( require ) {
 
   rixsSimulator.register( 'BeamNode', BeamNode );
 
-  return inherit( Rectangle, BeamNode );
+  inherit( Rectangle, BeamNode );
+  export default BeamNode;
 
-} ); // define

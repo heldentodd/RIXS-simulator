@@ -7,34 +7,80 @@
   <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="phet-sim-level" content="development">
-  
+
   <title>RIXS-simulator</title>
 </head>
 
 <!-- body is only made black for the loading phase so that the splash screen is black -->
 <body style="background-color:black;">
 
-<!-- a11y - aria-live attribute is used to send alerts and status updates to screen readers, otherwise invisible -->
-<div id='aria-live-elements'
-     style="position: absolute; left: 0px; top: 0px; width: 0px; height: 0px; clip: rect(0px 0px 0px 0px); pointer-events: none;">
-  <p id="polite-1" aria-live="polite"></p>
-  <p id="polite-2" aria-live="polite"></p>
-  <p id="polite-3" aria-live="polite"></p>
-  <p id="polite-4" aria-live="polite"></p>
-</div>
 
 <script type="text/javascript">
+
+  window.phet = window.phet || {};
+  window.phet.chipper = window.phet.chipper || {};
+  window.phet.chipper.packageObject =
+    {
+      "name": "RIXS-simulator",
+      "version": "1.0.0-dev.0",
+      "license": "GPL-3.0",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/phetsims/RIXS-simulator.git"
+      },
+      "devDependencies": {
+        "grunt": "~1.0.0"
+      },
+      "phet": {
+        "requirejsNamespace": "RIXS_SIMULATOR",
+        "simulation": true,
+        "runnable": true,
+        "readmeCreatedManually": true,
+        "supportedBrands": [
+          "phet",
+          "adapted-from-phet"
+        ]
+      },
+      "eslintConfig": {
+        "extends": "../chipper/eslint/sim_es6_eslintrc.js"
+      }
+    };
+  window.phet.chipper.stringRepos =
+    [
+      {
+        "repo": "joist",
+        "requirejsNamespace": "JOIST"
+      },
+      {
+        "repo": "scenery-phet",
+        "requirejsNamespace": "SCENERY_PHET"
+      },
+      {
+        "repo": "RIXS-simulator",
+        "requirejsNamespace": "RIXS_SIMULATOR"
+      },
+      {
+        "repo": "sun",
+        "requirejsNamespace": "SUN"
+      },
+      {
+        "repo": "tambo",
+        "requirejsNamespace": "TAMBO"
+      }
+    ];
 
   // Identify the brand (assume generated brand if not provided with query parameters)
   const brandMatch = location.search.match( /brand=([^&]+)/ );
   const brand = brandMatch ? decodeURIComponent( brandMatch[ 1 ] ) : 'adapted-from-phet';
 
-  // matches "cacheBust" at the start of the string, as well as directly after "?" or "&"
-  const cacheBust = /(^|\?|&)cacheBust/.test( location.search );
-  const queryAppend = cacheBust ? `?bust=${Date.now()}` : '';
+  // Cache busting is applied by default, but can be disabled via ?cacheBust=false, see initialize-globals.js
+  const isCacheBustDisabled = /(^|\?|&)cacheBust=false/.test( location.search );
+  const queryAppend = isCacheBustDisabled ? '' : `?bust=${Date.now()}`;
 
   // Preloads, with more included for phet-io brand
   let preloads = [
+  '../sherpa/lib/mdn-array-from-polyfill.js',
+    '../sherpa/lib/es6-promise-1e68dc.auto.min.js',
     '../joist/js/splash.js',
     '../sherpa/lib/jquery-2.1.0.js',
     '../sherpa/lib/lodash-4.17.4.js',
@@ -49,7 +95,8 @@
     '../sherpa/lib/game-up-camera-1.0.0.js',
     '../sherpa/lib/base64-js-1.2.0.js',
     '../sherpa/lib/TextEncoderLite-3c9f6f0.js',
-    '../tandem/js/PhetioIDUtils.js'
+    '../tandem/js/PhetioIDUtils.js',
+    '../chipper/js/SimVersion.js'
   ];
 
   if ( brand === 'phet-io' ) {
@@ -61,25 +108,37 @@
     ] );
   }
 
+  // TODO: es6 modules won't need a "main" param in this function
   // Loads a synchronously-executed asynchronously-downloaded script tag, with optional data-main parameter.
   // See http://www.html5rocks.com/en/tutorials/speed/script-loading/ for more about script loading. It helps to
   // load all of the scripts with this method, so they are treated the same (and placed in the correct execution
   // order).
-  const loadURL = ( preloadURL, main ) => {
+
+  const loadURL = ( preloadURL, type = 'text/javascript' ) => {
     const script = document.createElement( 'script' );
-    if ( typeof main === 'string' ) {
-      script.setAttribute( 'data-main', main );
-    }
-    script.type = 'text/javascript';
+    script.type = type;
     script.src = preloadURL + queryAppend;
     script.async = false;
     document.head.appendChild( script );
-  };
+  };/*/
+
+  const loadURL = ( preloadURL, type = 'text/javascript' ) => {
+    const script = document.createElement( 'script' );
+    script.type = type;
+    script.src = preloadURL;
+    script.async = false;
+    document.head.appendChild( script );
+  };*/
+
+  // Kick off string loading immediately
+  loadURL( '../chipper/js/load-unbuilt-strings.js' );
 
   // Queue all of the preloads to be loaded.
-  preloads.forEach( loadURL );
+  preloads.forEach( preload => loadURL( preload ) );
 
-  loadURL( '../sherpa/lib/require-2.3.6.js', 'js/RIXS-simulator-config.js' );
+  // Module loading in compilation-free (development) mode will be kicked off once strings are loaded.
+  // This is done in load-runtime-strings.js
+  window.phet.chipper.loadModules = () => loadURL( 'js/RIXS-simulator-main.js', 'module' );
 </script>
 </body>
 </html>

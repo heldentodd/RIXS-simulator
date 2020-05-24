@@ -6,15 +6,13 @@
  *
  * @author Todd Holden (Queensborough Community College of CUNY)
  */
-define( function( require ) {
-  'use strict';
 
   // modules
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  const Vector3 = require( 'DOT/Vector3' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
-  
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import NumberProperty from '../../../../axon/js/NumberProperty.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  //import Vector3 from '../../../../dot/js/Vector3.js';
+
   /**
    * Create a new sample crystal model. The mutable lattice constants (Assumed orthorhombic for now) and orientation.
    *
@@ -41,7 +39,7 @@ define( function( require ) {
 
   rixsSimulator.register( 'Sample', Sample );
 
-  return inherit( Object, Sample, {
+  inherit( Object, Sample, {
 
     /**
     * Restores the initial state of the Sample. This method is called when the simulation "Reset All" button is
@@ -56,4 +54,5 @@ define( function( require ) {
       //this.orientationP = this.orientationP._initialValue; 
     }
   } );
-} );
+
+  export default Sample;

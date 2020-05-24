@@ -6,27 +6,20 @@
  * @author Todd Holden (Queensborough Community College of CUNY)
  *
  */
-define( function( require ) {
-  'use strict';
-
   // modules
-  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' )
-  var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
-  const Color = require( 'SCENERY/util/Color' );
-  const FireListener = require( 'SCENERY/listeners/FireListener' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const Path = require( 'SCENERY/nodes/Path' );
-  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const RichText = require( 'SCENERY/nodes/RichText' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  const Shape = require( 'KITE/Shape' );
-  const Text = require( 'SCENERY/nodes/Text' );
+  import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+  import Color from '../../../../scenery/js/util/Color.js';
+  import FireListener from '../../../../scenery/js/listeners/FireListener.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import Node from '../../../../scenery/js/nodes/Node.js';
+  import Path from '../../../../scenery/js/nodes/Path.js';
+  import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+  import RichText from '../../../../scenery/js/nodes/RichText.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import Shape from '../../../../kite/js/Shape.js';
+  import Text from '../../../../scenery/js/nodes/Text.js';
   
   const TRANSITION_ARROW_OPTIONS = {fill: new Color( 255, 0, 255 ), stroke: null, tailWidth: 2, headWidth: 7, headHeight: 21 };
-
-  // images
-  //const MonochromatorImage = require( 'image!RIXS_SIMULATOR/monochromator.png' );
 
   /**
    * Constructor for the MonochromatorNode which renders the Monochromator as a scenery node.
@@ -37,10 +30,8 @@ define( function( require ) {
    */
   function EnergyLevelNode(positionX, positionY) {
 
-    this.positionX = positionX
-    this.positionY = positionY
-
-  //  var self = this;
+    this.positionX = positionX;
+    this.positionY = positionY;
 
     // Call the super constructor
     Node.call( this, {
@@ -64,7 +55,7 @@ define( function( require ) {
 
     const diagramOutline = new Path(diagramOutlineShape,{
         stroke: 'black',
-        lineWidth: 4  
+        lineWidth: 4
     } );
     //energyLevels: //typeIndex 0 = x2-y2, 1 = z2, 2=xz/yz, 3=xy, 4=CT, 5=magnon, 6=elastic, 7 = L3 edge
     this.energyLevels = [Math.log10(1.5), Math.log10(3), Math.log10(3.7), Math.log10(4.5), Math.log10(7), Math.log10(1.5), Math.log10(1.5), Math.log10(932)];
@@ -97,7 +88,7 @@ define( function( require ) {
      
     const levelLinesPath = new Path(levelLinesShape,{
         stroke: 'black',
-        lineWidth: 1  
+        lineWidth: 1
     } );
 
     const fermiLevelShape = new Shape()
@@ -107,7 +98,7 @@ define( function( require ) {
     const fermiLevelPath = new Path(fermiLevelShape,{
         lineDash: [ 3, 3 ],
         stroke: 'white',
-        lineWidth: 1  
+        lineWidth: 1
     } );
 
         
@@ -172,65 +163,65 @@ define( function( require ) {
     this.addChild( this.drawArrowsNode );
     
     // on click, open webpage
-    var EnergyLevelListener = new FireListener( {
-      fire: function () {open('EnergyLevels.html')}  
+    const EnergyLevelListener = new FireListener( {
+      fire: function () { open('EnergyLevels.html'); }
     } );
     this.addInputListener( EnergyLevelListener );
   }
 
   rixsSimulator.register( 'EnergyLevelNode', EnergyLevelNode );
 
-  return inherit( Node, EnergyLevelNode, {
+  inherit( Node, EnergyLevelNode, {
 
     paintArrows: function( transitions, drawArrowsNode ) {
-        var radius = 5;
-        var self = this;
-        var energyLevels = self.energyLevels;
+        const radius = 5;
+        const self = this;
+        const energyLevels = self.energyLevels;
         self.drawArrowsNode.removeAllChildren();
         transitions.forEach( function ( transition ) {
-            var arrowUp = new ArrowNode(self.positionX + self.offsetED + self.widthED * transition.xPosition, self.positionY + self.heightED * energyLevels[7], 
+            const arrowUp = new ArrowNode(self.positionX + self.offsetED + self.widthED * transition.xPosition, self.positionY + self.heightED * energyLevels[7],
                         self.positionX + self.offsetED + self.widthED * transition.xPosition, self.positionY + self.heightED * energyLevels[0],
                         TRANSITION_ARROW_OPTIONS);
             self.drawArrowsNode.addChild(arrowUp);
-            var lStateShape = new Shape()
+            const lStateShape = new Shape()
                 .arc(radius + self.positionX + self.offsetED + self.widthED * transition.xPosition, self.positionY + self.heightED * energyLevels[7],
-                    radius, 0, 2*Math.PI,);
+                    radius, 0, 2*Math.PI );
        //         electronShape.moveTo(self.positionX + self.offsetED + self.widthED * transition.xPosition, self.positionY + self.heightED * energyLevels[0]);
-            var valenceElectronShape = new Shape()
+            const valenceElectronShape = new Shape()
                 .arc( radius + self.positionX + self.offsetED + self.widthED * transition.xPosition, self.positionY + self.heightED * energyLevels[0],
-                    radius, 0, 2*Math.PI,);
+                    radius, 0, 2*Math.PI );
             const lStatePath = new Path(lStateShape,{
               stroke: 'red',
               fill: 'white',
-              lineWidth: 1  
+              lineWidth: 1
             } );
                   
             const valenceElectronPath = new Path(valenceElectronShape,{
               stroke: 'red',
               fill: 'red',
-              lineWidth: 1  
+              lineWidth: 1
             } );
             self.drawArrowsNode.addChild(valenceElectronPath);
             
             if (transition.timeLeft > 1.0) {
-              lStatePath.fill = 'white'
+              lStatePath.fill = 'white';
             }
             else {
-              var arrowDown = new ArrowNode(2* radius + self.positionX + self.offsetED + self.widthED * transition.xPosition, 
-                  self.positionY + self.heightED * energyLevels[transition.decayType], 
-                  2 * radius + self.positionX + self.offsetED + self.widthED * transition.xPosition, 
+              const arrowDown = new ArrowNode(2* radius + self.positionX + self.offsetED + self.widthED * transition.xPosition,
+                  self.positionY + self.heightED * energyLevels[transition.decayType],
+                  2 * radius + self.positionX + self.offsetED + self.widthED * transition.xPosition,
                   self.positionY + self.heightED * energyLevels[7], TRANSITION_ARROW_OPTIONS);
               self.drawArrowsNode.addChild(arrowDown);
               lStatePath.fill = 'red';
 
-              var dStateShape = new Shape()
+              const dStateShape = new Shape()
                 .arc( radius + self.positionX + self.offsetED + self.widthED * transition.xPosition, self.positionY + self.heightED * energyLevels[transition.decayType],
-                    radius, 0, 2*Math.PI,);
+                    radius, 0, 2*Math.PI );
               
               const dStatePath = new Path(dStateShape,{
                 stroke: 'red',
                 fill: 'white',
-                lineWidth: 1  
+                lineWidth: 1
               } );
               self.drawArrowsNode.addChild(dStatePath);
             }
@@ -243,4 +234,5 @@ define( function( require ) {
         
     }
   } );
-} );
+
+  export default EnergyLevelNode;

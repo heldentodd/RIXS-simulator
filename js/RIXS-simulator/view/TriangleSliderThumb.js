@@ -6,20 +6,19 @@
  *
  * @author Arnab Purkayastha
  */
-define( require => {
-  'use strict';
 
   // modules
-  const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  const RIXSColorProfile = require( 'RIXS_SIMULATOR/RIXS-simulator/view/RIXSColorProfile' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  const ButtonListener = require( 'SCENERY/input/ButtonListener' );
-  const Dimension2 = require( 'DOT/Dimension2' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const Path = require( 'SCENERY/nodes/Path' );
-  const Shape = require( 'KITE/Shape' );
-  const Tandem = require( 'TANDEM/Tandem' );
-
+  import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+  import ButtonListener from '../../../../scenery/js/input/ButtonListener.js';
+  import Dimension2 from '../../../../dot/js/Dimension2.js';
+  import merge from '../../../../phet-core/js/merge.js';
+  import Node from '../../../../scenery/js/nodes/Node.js';
+  import Path from '../../../../scenery/js/nodes/Path.js';
+  import RIXSColorProfile from './RIXSColorProfile.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import Shape from '../../../../kite/js/Shape.js';
+  import Tandem from '../../../../tandem/js/Tandem.js';
+  
   class TriangleSliderThumb extends Path {
 
     /**
@@ -29,7 +28,7 @@ define( require => {
      */
     constructor( options ) {
 
-      options = _.extend( {
+      options = merge( {
         size: new Dimension2( 15, 15 ),
         stroke: RIXSColorProfile.triangleStrokeProperty,
         lineWidth: 1,
@@ -100,5 +99,5 @@ define( require => {
 
   }
 
-  return rixsSimulator.register( 'TriangleSliderThumb', TriangleSliderThumb );
-} );
+  rixsSimulator.register( 'TriangleSliderThumb', TriangleSliderThumb );
+  export default TriangleSliderThumb;

@@ -6,24 +6,15 @@
  * @author Todd Holden (Queensborough Community College of CUNY)
  *
  */
-define( function( require ) {
-  'use strict';
 
   // modules
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  const AngleDragHandler = require( 'RIXS_SIMULATOR/RIXS-simulator/view/AngleDragHandler' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const Color = require( 'SCENERY/util/Color' );
-  const Text = require( 'SCENERY/nodes/Text' );
-  const Util = require( 'DOT/Util' );
-
+  import rixsSimulator from '../../rixsSimulator.js';
+  import AngleDragHandler from './AngleDragHandler.js';
+  import Image from '../../../../scenery/js/nodes/Image.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import Node from '../../../../scenery/js/nodes/Node.js';
+  
   // strings
-
-  // constants working here!
-  const NUMBERS_FONT = new PhetFont( { size: 22, weight: 'bold' } );
 
   /**
    * Constructor for the RotatingNode which renders the Sample as a scenery node.
@@ -35,8 +26,6 @@ define( function( require ) {
    * @constructor 
    */
   function RotatingNode(imageBitmap, imageCenter, rotationCenter, orientationP , tandem) {
-
-    var self = this;
 
     this._initialCenter = imageCenter;
 
@@ -57,15 +46,14 @@ define( function( require ) {
     this.addChild( this.Image );
     
     // rotate molecule by dragging anywhere
-    var dragHandler = new AngleDragHandler( this.Image, rotationCenter, orientationP );
+    const dragHandler = new AngleDragHandler( this.Image, rotationCenter, orientationP );
     this.addInputListener( dragHandler );
 
   }
 
   rixsSimulator.register( 'RotatingNode', RotatingNode );
 
-  //return inherit( Node, RotatingNode );
-  return inherit( Node, RotatingNode, {
+  inherit( Node, RotatingNode, {
 
     /**
     * Restores the initial orientation of the Sample. // ToDo - reset not running
@@ -77,5 +65,5 @@ define( function( require ) {
     this.Image.centerY = this._initialCenter.y;
     }
 } );
-} );
 
+export default RotatingNode;

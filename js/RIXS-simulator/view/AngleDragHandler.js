@@ -6,12 +6,10 @@
  * @author Todd Holden (Queensborough Community College of CUNY)
  * @author Modified from MoleculeAngleDragHandler by Chris Malley (PixelZoom, Inc.)
  */
-define( function( require ) {
-  'use strict';
 
-  var inherit = require( 'PHET_CORE/inherit' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var Vector2 = require( 'DOT/Vector2' );
+import inherit from '../../../../phet-core/js/inherit.js';
+import SimpleDragHandler from '../../../../scenery/js/input/SimpleDragHandler.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
   /**
    * @param {Node} ImageNode
@@ -21,15 +19,15 @@ define( function( require ) {
   function AngleDragHandler( ImageNode, rotationCenter, modelangleP ) {
 
     const r = new Vector2(ImageNode.centerX - rotationCenter.x, ImageNode.centerY - rotationCenter.y ).magnitude;
-    var previousAngle; // angle between the pointer and the ImageNode when the drag started
+    let previousAngle = 0; // angle between the pointer and the ImageNode when the drag started
 
     /**
      * Gets the angle of the pointer relative to relativeNode.
      * @param {Event} event
      * @returns {number} angle in radians
      */
-    var getAngle = function( event ) {
-      var point = (ImageNode.globalToParentPoint( event.pointer.point ) );
+    const getAngle = function( event ) {
+      const point = (ImageNode.globalToParentPoint( event.pointer.point ) );
       return new Vector2( point.x - rotationCenter.x, point.y - rotationCenter.y ).angle;
     };
 
@@ -43,13 +41,13 @@ define( function( require ) {
       },
 
       drag: function( event ) {
-        var currentAngle = getAngle( event );
+        const currentAngle = getAngle( event );
         ImageNode.rotation = ImageNode.rotation + currentAngle - previousAngle ;
         ImageNode.centerX = rotationCenter.x - r * Math.sin(ImageNode.rotation);
         ImageNode.centerY = rotationCenter.y + r * Math.cos(ImageNode.rotation);
         modelangleP.value = modelangleP.value - currentAngle + previousAngle ;
-        if ( modelangleP.value < 0 ) {modelangleP.value += 2 * Math.PI } 
-        else if ( modelangleP.value > 2 * Math.PI ) {modelangleP.value -= 2 * Math.PI }
+        if ( modelangleP.value < 0 ) { modelangleP.value += 2 * Math.PI; }
+        else if ( modelangleP.value > 2 * Math.PI ) { modelangleP.value -= 2 * Math.PI; }
   //      console.log(ImageNode.centerX, ImageNode.centerY, r, modelangleP.value*180/Math.PI);
         previousAngle = currentAngle ;
       },
@@ -62,5 +60,5 @@ define( function( require ) {
 
   //moleculePolarity.register( 'AngleDragHandler', AngleDragHandler );
 
-  return inherit( SimpleDragHandler, AngleDragHandler );
-} );
+  inherit( SimpleDragHandler, AngleDragHandler );
+  export default AngleDragHandler;

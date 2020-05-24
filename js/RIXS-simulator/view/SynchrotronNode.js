@@ -6,19 +6,15 @@
  * @author Todd Holden (Queensborough Community College of CUNY)
  *
  */
-define( function( require ) {
-  'use strict';
 
   // modules
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  var FireListener = require( 'SCENERY/listeners/FireListener' );
-
-  // images
-  const SynchrotronImage = require( 'image!RIXS_SIMULATOR/synchrotron.png' );
-
+  import Image from '../../../../scenery/js/nodes/Image.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import Node from '../../../../scenery/js/nodes/Node.js';
+  import FireListener from '../../../../scenery/js/listeners/FireListener.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import SynchrotronImage from '../../../images/synchrotron_png.js';
+  
   /**
    * Constructor for the SynchrotronNode which renders the Synchrotron as a scenery node.
    *
@@ -27,8 +23,6 @@ define( function( require ) {
    * @constructor ??
    */
   function SynchrotronNode(positionX, positionY) {
-
-    var self = this;
 
     // Call the super constructor
     Node.call( this, {
@@ -47,8 +41,8 @@ define( function( require ) {
     } ) );
 
     // on click, open webpage
-    var synchrotronListener = new FireListener( {
-      fire: function () {open('synchrotron.html')}
+    const synchrotronListener = new FireListener( {
+      fire: function () { open('synchrotron.html'); }
     } );
     this.addInputListener( synchrotronListener );
   
@@ -56,5 +50,5 @@ define( function( require ) {
 
   rixsSimulator.register( 'SynchrotronNode', SynchrotronNode );
 
-  return inherit( Node, SynchrotronNode );
-} );
+  inherit( Node, SynchrotronNode );
+  export default SynchrotronNode;

@@ -5,25 +5,18 @@
  *
  * @author Jesse Greenberg - modified by Todd Holden (QCC) - from RS/common/model/AtomSpace.js
  */
-define( function( require ) {
-  'use strict';
 
   // modules
-  var Photon = require( 'RIXS_SIMULATOR/RIXS-simulator/model/Photon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  var Vector2 = require( 'DOT/Vector2' );
+  //import Photon from './Photon.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import Vector2 from '../../../../dot/js/Vector2.js';
 
   /**
    * Constructor.
    * @param {Bounds2} bounds
-   * @param {Object} options
    */
-  function PhotonSpace( bounds, options ) {
-
-   /* options = _.extend( {
-      atomWidth: bounds.width // width of each atom in the space, width of space by default
-    }, options );*/
+  function PhotonSpace( bounds ) {
 
     // @public (read-only)
     this.photons = []; // all photons contained by this space
@@ -35,7 +28,7 @@ define( function( require ) {
 
   rixsSimulator.register( 'PhotonSpace', PhotonSpace );
 
-  return inherit( Object, PhotonSpace, {
+  inherit( Object, PhotonSpace, {
 
     /**
      * Add a photon to this space, and track it as being in the empty space
@@ -53,7 +46,7 @@ define( function( require ) {
      * @public
      */
     removePhoton: function( photon ) { //ToDo, can probably just keep the most recent 30 instead
-      var index = this.photons.indexOf( photon );
+      const index = this.photons.indexOf( photon );
       if ( index > -1 ) {
         this.photons.splice( index, 1 );
       }
@@ -76,19 +69,20 @@ define( function( require ) {
       //console.log(this.photons)
 
       // move photons in empty space straight through //ToDo - this will handle everything soon
-      for ( var i = 0 ; i < this.photons.length; i++ ) {
-        var photon = this.photons[ i ];
+      for ( let i = 0 ; i < this.photons.length; i++ ) {
+        const photon = this.photons[ i ];
 
-        var speed = photon.speedProperty.get();
-        var distance = speed * dt;
-        var direction = photon.orientationProperty.get();
-        var dx = Math.cos( direction ) * distance;
-        var dy = Math.sin( direction ) * distance;
-        var position = photon.positionProperty.get();
-        var x = position.x + dx;
-        var y = position.y + dy;
+        const speed = photon.speedProperty.get();
+        const distance = speed * dt;
+        const direction = photon.orientationProperty.get();
+        const dx = Math.cos( direction ) * distance;
+        const dy = Math.sin( direction ) * distance;
+        const position = photon.positionProperty.get();
+        const x = position.x + dx;
+        const y = position.y + dy;
         photon.positionProperty.set( new Vector2( x, y ) );
       }
-    },
+    }
   } );
-} ); // define
+
+  export default PhotonSpace;

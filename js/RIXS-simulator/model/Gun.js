@@ -6,19 +6,17 @@
  * @author Dave Schmitz (Schmitzware) - modified by Todd Holden
  */
 
-define( function( require ) {
-  'use strict';
-
   // modules
-  var Photon = require( 'RIXS_SIMULATOR/RIXS-simulator/model/Photon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  var Vector2 = require( 'DOT/Vector2' );
+  import Photon from './Photon.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import Property from '../../../../axon/js/Property.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import Vector2 from '../../../../dot/js/Vector2.js';
+
 
   // constants
-  var MAX_PARTICLES = 20;
-  var GUN_INTENSITY = 1;
+  const MAX_PARTICLES = 20;
+  const GUN_INTENSITY = 1;
 
   /**
    * {RSBaseModel} model
@@ -38,7 +36,7 @@ define( function( require ) {
 
   rixsSimulator.register( 'Gun', Gun );
 
-  return inherit( Object, Gun, {
+  inherit( Object, Gun, {
 
     /**
      * {number} dt - time step
@@ -46,18 +44,18 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      var initialSpeed = 100;
+      const initialSpeed = 100;
 
       this.dtSinceGunFired += ( GUN_INTENSITY * dt );
       this.dtPerGunFired = ( this.model.bounds.width / initialSpeed ) / MAX_PARTICLES; // need to revisit this
 
       if ( this.onProperty.get() && this.dtSinceGunFired >= this.dtPerGunFired ) {
 
-        var particleX = 128 ; // 100,100 need to revisit this probably should be relative to monochromator center
-        var particleY = 3.5;
+        const particleX = 128 ; // 100,100 need to revisit this probably should be relative to monochromator center
+        const particleY = 3.5;
 
-        var initialPosition = new Vector2( particleX, particleY );
-        var photon = new Photon( {
+        const initialPosition = new Vector2( particleX, particleY );
+        const photon = new Photon( {
           speed: initialSpeed,
           defaultSpeed: initialSpeed,
           position: initialPosition
@@ -76,6 +74,6 @@ define( function( require ) {
       this.onProperty.reset();
     }
 
-  } ); // inherit
-
-} ); // define
+  } );
+  
+  export default Gun;

@@ -5,38 +5,34 @@
  *
  * @author Dave Schmitz (Schmitzware)
  */
-define( function( require ) {
-  'use strict';
 
   // modules
-  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var Circle = require( 'SCENERY/nodes/Circle' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Line = require( 'SCENERY/nodes/Line' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var RadialGradient = require( 'SCENERY/util/RadialGradient' );
-  //var RSColorProfile = require( 'RUTHERFORD_SCATTERING/RIXSColorProfile' );
-  const RIXSColorProfile = require( 'RIXS_SIMULATOR/RIXS-simulator/view/RIXSColorProfile' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
+  import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+  import Circle from '../../../../scenery/js/nodes/Circle.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import Line from '../../../../scenery/js/nodes/Line.js';
+  import Node from '../../../../scenery/js/nodes/Node.js';
+  import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import RIXSColorProfile from './RIXSColorProfile.js';
   
   // constants
-  var SPECULAR_HIGHLITE_COLOR = 'rgb(200,200,200)';
-  var ELECTRON_COLOR = 'rgb(135,135,205)';
-  var PROTON_COLOR = 'rgb(255,69,0)';
-  var NEUTRON_COLOR = 'rgb(192,192,192)';
-  var PARTICLE_COLOR = 'rgb(255,0,255)';
-  var ENERGY_LEVEL_COLOR = 'rgb(128,128,128)';
-  var ELECTRON_RADIUS = 2.5;
-  var PROTON_RADIUS = 4;
-  var NEUTRON_RADIUS = 4;
-  var PARTICLE_RADIUS = 2;
-  var NUCLEUS_RADIUS = 2;
-  var ENERGY_LEVEL_LINE_LENGTH = 5;
+  const SPECULAR_HIGHLITE_COLOR = 'rgb(200,200,200)';
+  const ELECTRON_COLOR = 'rgb(135,135,205)';
+  const PROTON_COLOR = 'rgb(255,69,0)';
+  const NEUTRON_COLOR = 'rgb(192,192,192)';
+  const PARTICLE_COLOR = 'rgb(255,0,255)';
+  const ENERGY_LEVEL_COLOR = 'rgb(128,128,128)';
+  const ELECTRON_RADIUS = 2.5;
+  const PROTON_RADIUS = 4;
+  const NEUTRON_RADIUS = 4;
+  const PARTICLE_RADIUS = 2;
+  const NUCLEUS_RADIUS = 2;
+  const ENERGY_LEVEL_LINE_LENGTH = 5;
 
   // images
   
-  var ParticleNodeFactory = {
+  const ParticleNodeFactory = {
 
     /**
      * Creates an electron node.
@@ -169,8 +165,7 @@ define( function( require ) {
           new Circle( PARTICLE_RADIUS, { fill: PARTICLE_COLOR } )
         ]
       } );
-    },
-
+    }
   };
 
   rixsSimulator.register( 'ParticleNodeFactory', ParticleNodeFactory );
@@ -206,13 +201,13 @@ define( function( require ) {
    * @param  {CanvasRenderingContext2D} context
    * @private
    */
-  var drawParticleWithCanvas = function( x, y, radius, color, context ) {
+  const drawParticleWithCanvas = function( x, y, radius, color, context ) {
     // draw the circle
     context.beginPath();
     context.arc( x, y, radius, 0, 2 * Math.PI, false);
 
     // create the radial gradient from the center of the arc
-    var gradient = context.createRadialGradient( x + radius * 0.1, y + radius * 0.7, 0.2, x + -radius * 0.2, y + -radius * 0.3, radius * 2 );
+    const gradient = context.createRadialGradient( x + radius * 0.1, y + radius * 0.7, 0.2, x + -radius * 0.2, y + -radius * 0.3, radius * 2 );
     gradient.addColorStop( 0, SPECULAR_HIGHLITE_COLOR );
     gradient.addColorStop( 0.33, color );
     gradient.addColorStop( 1, 'black' );
@@ -223,5 +218,4 @@ define( function( require ) {
     context.closePath();
   };
 
-  return ParticleNodeFactory;
-} );
+  export default ParticleNodeFactory;

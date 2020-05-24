@@ -12,9 +12,15 @@
     "value": "Cu M1 edge"
   },
   "photonEnergy": {
-    "value": "Photon<br>Energy"
+    "value": "Photon Energy"
   },
   "energyUnits": {
     "value": "eV"
+  },
+  "angleUnits": {
+    "value": "°"
+  },
+  "wnUnits": {
+    "value": "Å<sup>-1</sup>"
   }
 }

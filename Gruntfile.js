@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2020, University of Colorado Boulder
 
 // use chipper's gruntfile
 module.exports = require( '../chipper/js/grunt/Gruntfile.js' );

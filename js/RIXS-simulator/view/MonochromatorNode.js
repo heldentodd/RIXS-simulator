@@ -6,19 +6,15 @@
  * @author Todd Holden (Queensborough Community College of CUNY)
  *
  */
-define( function( require ) {
-  'use strict';
 
-  // modules
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const FireListener = require( 'SCENERY/listeners/FireListener' );
-
-  // images
-  const MonochromatorImage = require( 'image!RIXS_SIMULATOR/monochromator.png' );
-
+ // modules
+  import Image from '../../../../scenery/js/nodes/Image.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import MonochromatorImage from '../../../images/monochromator_png.js';
+  import Node from '../../../../scenery/js/nodes/Node.js';
+  import FireListener from '../../../../scenery/js/listeners/FireListener.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  
   /**
    * Constructor for the MonochromatorNode which renders the Monochromator as a scenery node.
    *
@@ -27,8 +23,6 @@ define( function( require ) {
    * @constructor ??
    */
   function MonochromatorNode(positionX, positionY) {
-
-    var self = this;
 
     // Call the super constructor
     Node.call( this, {
@@ -48,8 +42,8 @@ define( function( require ) {
     } ) );
 
     // on click, open webpage
-    var MonochromatorListener = new FireListener( {
-      fire: function () {open('Monochromator.html')}  
+    const MonochromatorListener = new FireListener( {
+      fire: function () { open('Monochromator.html'); }
     } );
     this.addInputListener( MonochromatorListener );
   
@@ -57,5 +51,6 @@ define( function( require ) {
 
   rixsSimulator.register( 'MonochromatorNode', MonochromatorNode );
 
-  return inherit( Node, MonochromatorNode );
-} );
+  inherit( Node, MonochromatorNode );
+  export default MonochromatorNode;
+

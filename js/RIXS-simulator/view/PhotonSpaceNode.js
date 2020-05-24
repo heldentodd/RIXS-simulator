@@ -9,32 +9,29 @@
  * @author Dave Schmitz (Schmitzware) modified by TH from ParticleSpaceNode.js
  * @author Jesse Greenberg
  */
-define( function( require ) {
-  'use strict';
 
   // modules
-  var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
-  var Color = require( 'SCENERY/util/Color' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ParticleNodeFactory = require( 'RIXS_SIMULATOR/RIXS-simulator/view/ParticleNodeFactory' );
-  const RIXSColorProfile = require( 'RIXS_SIMULATOR/RIXS-simulator/view/RIXSColorProfile' );
-  const RIXSConstants = require( 'RIXS_SIMULATOR/RIXSConstants' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  var Util = require( 'DOT/Util' );
+  import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+  import Color from '../../../../scenery/js/util/Color.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import merge from '../../../../phet-core/js/merge.js';
+  import ParticleNodeFactory from './ParticleNodeFactory.js';
+  import RIXSColorProfile from './RIXSColorProfile.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+  import Utils from '../../../../dot/js/Utils.js';
 
   // constants
-  var SPACE_BORDER_WIDTH = 2;
-  var SPACE_BORDER_COLOR = 'grey';
-  //var SPACE_BORDER_COLOR = RIXSColorProfile.backgroundColorProperty.get().toCSS();  
-  var PARTICLE_TRACE_WIDTH = 1.5;
-  var FADEOUT_SEGMENTS = 80;
+  const SPACE_BORDER_WIDTH = 2;
+  const SPACE_BORDER_COLOR = 'grey';
+  //const SPACE_BORDER_COLOR = RIXSColorProfile.backgroundColorProperty.get().toCSS();  
+  const PARTICLE_TRACE_WIDTH = 1.5;
+  const FADEOUT_SEGMENTS = 80;
 
   /**
    * @param {photonSpace} photonSpace - space containing photons
    * @param {Property} showAlphaTraceProperty
    * @param {ModelViewTransform2} modelViewTransform - model to view  transform
-   * @param {Object} options - must contain a canvasBounds attribute of type Bounds2
    * @constructor
    */
   function PhotonSpaceNode( photonSpace, showAlphaTraceProperty, modelViewTransform, options ) {
@@ -44,7 +41,7 @@ define( function( require ) {
     // the bounds should be eroded by 10 so it appears that particles glide into the space
     //options.canvasBounds = options.canvasBounds.eroded( RIXSConstants.SPACE_BUFFER );
 
-    options = _.extend( {
+    options = merge( {
       particleStyle: 'particle', // 'nucleus'|'particle'
       particleTraceColor: new Color(255,0,255)
     }, options );
@@ -53,7 +50,7 @@ define( function( require ) {
 
     CanvasNode.call( this, options );
 
-    var self = this;
+    const self = this;
 
     // @private
     this.photonSpace = photonSpace;
@@ -79,13 +76,15 @@ define( function( require ) {
     };
 
     // create a single photon image to use for rendering all particles - asynchronous
-    var photon;
+   /* var photon;
     if ( this.particleStyle === 'nucleus' ) {
       photon = ParticleNodeFactory.createNucleusAlpha();
     }
     else if ( this.particleStyle === 'particle' ) {
       photon = ParticleNodeFactory.createParticleAlpha();
-    }
+    }*/
+    let photon = ParticleNodeFactory.createParticleAlpha();
+    photon = ParticleNodeFactory.createParticleAlpha();
     photon.toImage( function( image, x, y ) {
       self.photonImage = image;
       self.particleImageHalfWidth = self.photonImage.width / 2;
@@ -97,7 +96,7 @@ define( function( require ) {
 
   rixsSimulator.register( 'PhotonSpaceNode', PhotonSpaceNode );
 
-  return inherit( CanvasNode, PhotonSpaceNode, {
+  inherit( CanvasNode, PhotonSpaceNode, {
 
     /**
      * A no/op function to be implemented by derived objects
@@ -115,10 +114,10 @@ define( function( require ) {
      */
     paintCanvas: function( context ) {
 
-      var self = this;
+      const self = this;
 
-      var bounds = this.canvasBounds;
-      var renderTrace = self.showAlphaTraceProperty.value;
+      const bounds = this.canvasBounds;
+      const renderTrace = self.showAlphaTraceProperty.value;
 
       // clear
       context.clearRect( bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight() );
@@ -159,7 +158,7 @@ define( function( require ) {
      * @private
      */
     renderPhotons: function( context, particleContainer, renderTrace ) {
-      var self = this;
+      const self = this;
 
       if ( renderTrace ) {
 
@@ -177,24 +176,24 @@ define( function( require ) {
         if ( renderTrace ) {
 
           // add trace segments
-          for ( var i = 1; i < particle.positions.length; i++ ) {
+          for ( let i = 1; i < particle.positions.length; i++ ) {
             if ( self.particleStyle === 'particle' ) {
 
               // if the style is of a 'particle', each segment needs a new path to create the gradient effect
               context.beginPath();
             }
 
-            var segmentStartViewPosition = self.modelViewTransform.modelToViewPosition( particle.positions[ i - 1 ] );
+            const segmentStartViewPosition = self.modelViewTransform.modelToViewPosition( particle.positions[ i - 1 ] );
             context.moveTo( segmentStartViewPosition.x, segmentStartViewPosition.y );
-            var segmentEndViewPosition = self.modelViewTransform.modelToViewPosition( particle.positions[ i ] );
+            const segmentEndViewPosition = self.modelViewTransform.modelToViewPosition( particle.positions[ i ] );
             context.lineTo( segmentEndViewPosition.x, segmentEndViewPosition.y );
 
             if ( self.particleStyle === 'particle' ) {
 
               // only the last FADEOUT_SEGMENTS should be visible, map i to the opacity
-              var length = particle.positions.length;
-              var alpha = Util.linear( length - FADEOUT_SEGMENTS, length, 0, 0.5, i );
-              var strokeStyle = StringUtils.format( self.particleTraceColorWithFade, alpha );
+              const length = particle.positions.length;
+              const alpha = Utils.linear( length - FADEOUT_SEGMENTS, length, 0, 0.5, i );
+              const strokeStyle = StringUtils.format( self.particleTraceColorWithFade, alpha );
               context.strokeStyle = strokeStyle;
               context.stroke();
               context.closePath();
@@ -203,7 +202,7 @@ define( function( require ) {
         }
 
         // render particle
-        var particleViewPosition = self.modelViewTransform.modelToViewPosition( particle.positionProperty.get() );
+        const particleViewPosition = self.modelViewTransform.modelToViewPosition( particle.positionProperty.get() );
         context.drawImage( self.photonImage,
           particleViewPosition.x - self.particleImageHalfWidth,
           particleViewPosition.y - self.particleImageHalfHeight );
@@ -216,5 +215,6 @@ define( function( require ) {
         }
       }
     }
-  } ); // inherit
-} ); // define
+  } );
+  
+  export default PhotonSpaceNode;

@@ -6,14 +6,13 @@
  * @author Dave Schmitz (Schmitzware) - modified by Todd Holden from AlphaParticle.js
  * @author Jesse Greenberg
  */
-define( function( require ) {
-  'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  var Vector2 = require( 'DOT/Vector2' );
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import merge from '../../../../phet-core/js/merge.js';
+  import Property from '../../../../axon/js/Property.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import Vector2 from '../../../../dot/js/Vector2.js';
 
   /**
    * @param {Object} [options]
@@ -21,7 +20,7 @@ define( function( require ) {
    */
   function Photon( options ) {
 
-    options = _.extend( {
+    options = merge( {
       speed: 0,
       position: new Vector2( 0, 0 ),  // {Vector2} initial position
       orientation: 5 * Math.PI / 6  // {number} in radians ToDo
@@ -38,8 +37,8 @@ define( function( require ) {
     this.scattered = false;
 
     // @private - save new photon location
-    var self = this;
-    var positionListener = function( position ) {
+    const self = this;
+    const positionListener = function( position ) {
       self.positions.push( new Vector2( position.x, position.y ) );
     };
     this.positionProperty.link( positionListener );
@@ -53,7 +52,7 @@ define( function( require ) {
 
   rixsSimulator.register( 'Photon', Photon );
 
-  return inherit( Object, Photon, {
+  inherit( Object, Photon, {
 
     // @public
     dispose: function() {
@@ -71,16 +70,16 @@ define( function( require ) {
 
       // if there are less than two positions, return a vector pointing in the initial orientation
       if ( this.positions.length < 2 ) {
-        var orientation = this.orientationProperty.get();
+        const orientation = this.orientationProperty.get();
         return new Vector2( Math.cos( orientation ), Math.sin( orientation ) ).normalized();
       }
 
-      var position1 = this.positions[ this.positions.length - 2 ];
-      var position2 = this.positions[ this.positions.length - 1 ];
-      var direction = new Vector2( position2.x - position1.x, position2.y - position1.y );
+      const position1 = this.positions[ this.positions.length - 2 ];
+      const position2 = this.positions[ this.positions.length - 1 ];
+      const direction = new Vector2( position2.x - position1.x, position2.y - position1.y );
 
       return direction.normalized();
-    },
-  } );  // inherit
-
-} );  // define
+    }
+  } );
+  
+  export default Photon;

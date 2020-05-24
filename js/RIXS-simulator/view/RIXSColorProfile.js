@@ -8,13 +8,11 @@
  * @author Todd Holden (QCC of CUNY)
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  const Color = require( 'SCENERY/util/Color' );
-  const ColorProfile = require( 'SCENERY_PHET/ColorProfile' );
+ // modules
+  import rixsSimulator from '../../rixsSimulator.js';
+  import Color from '../../../../scenery/js/util/Color.js';
+  import ColorProfile from '../../../../scenery-phet/js/ColorProfile.js';
 
   const RIXSColorProfile = new ColorProfile( [ 'default', 'projector' ], {
     background: {
@@ -79,6 +77,6 @@ define( require => {
     }
   } );
 
-  return rixsSimulator.register( 'RIXSColorProfile', RIXSColorProfile );
-} );
+  rixsSimulator.register( 'RIXSColorProfile', RIXSColorProfile );
 
+export default RIXSColorProfile;

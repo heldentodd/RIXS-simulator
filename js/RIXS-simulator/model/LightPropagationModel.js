@@ -6,17 +6,16 @@
  *
  * @author Dave Schmitz (Schmitzware) - modified by Todd Holden (QCC) from RSBaseModel.js
  */
-define( function( require ) {
-  'use strict';
+//  'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var Emitter = require( 'AXON/Emitter' );
-  var Gun = require( 'RIXS_SIMULATOR/RIXS-simulator/model/Gun' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  var RIXSConstants = require( 'RIXS_SIMULATOR/RIXSConstants' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
+  import Bounds2 from '../../../../dot/js/Bounds2.js';
+  import Emitter from '../../../../axon/js/Emitter.js';
+  import Gun from './Gun.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import Property from '../../../../axon/js/Property.js';
+  import RIXSConstants from '../RIXSConstants.js';
+  import rixsSimulator from '../../rixsSimulator.js';
   
   /**
    * @constructor
@@ -56,7 +55,7 @@ define( function( require ) {
 
   rixsSimulator.register( 'LightPropagationModel', LightPropagationModel );
 
-  return inherit( Object, LightPropagationModel, {
+  inherit( Object, LightPropagationModel, {
 
     /**
      * Registers a listener to be called at each step of the model execution
@@ -65,24 +64,6 @@ define( function( require ) {
      */
     addStepListener: function( listener ) {
       this.stepEmitter.addListener( listener );
-    },
-
-    /**
-     * Get the space which is currently visible.
-     * @returns {AtomSpace}
-     * @public
-     */
-    getVisibleSpace: function() {
-      var visibleSpace;
-      this.sampleSpaces.forEach( function( space ) {
-        if ( space.isVisible ) {
-          visibleSpace = space;
-          return;
-        }
-      } );
-      assert && assert( visibleSpace, 'There must be a visible space' );
-
-      return visibleSpace;
     },
 
     /**
@@ -104,7 +85,7 @@ define( function( require ) {
      */
     removePhoton: function( photon ) {
       // remove the photon from the visible space
-      var visibleSpace = this.getVisibleSpace();
+      const visibleSpace = this.getVisibleSpace();
       visibleSpace.removePhoton( photon );
 
       // remove the photon from its atom if scattered
@@ -113,7 +94,7 @@ define( function( require ) {
       } );
 
       // remove the photon from the base model
-      var index = this.photons.indexOf( photon );
+      const index = this.photons.indexOf( photon );
       if ( index > -1 ) {
         this.photons.splice( index, 1 );
       }
@@ -125,7 +106,7 @@ define( function( require ) {
      */
     removeAllPhotons: function() {
       // remove the photons from the visible space
-      var visibleSpace = this.getVisibleSpace();
+      const visibleSpace = this.getVisibleSpace();
       visibleSpace.removeAllPhotons();
 
       // remove all photons from the atoms
@@ -160,22 +141,6 @@ define( function( require ) {
 
       // move photons owned by the visible space
       this.getVisibleSpace().movePhotons( dt );
-    },
-
-    /**
-     * Culls alpha photons that have left the bounds of model space.
-     * @protected
-     */
-    cullPhotons: function() {
-      var self = this;
-      console.log('cullphotons called');
-      this.photons.forEach( function( photon ) {
-//        console.log(bounds);
-//        console.log(photon.positionProperty);
-        if ( !self.bounds.containsPoint( photon.positionProperty.get() ) ) {
-          self.removePhoton( photon );
-        }
-      } );
     },
 
     /**
@@ -214,12 +179,12 @@ define( function( require ) {
      * @public
      */
     reset: function() {
-      this.gun.reset();
+     // this.gun.reset();
       this.removeAllPhotons();
      // this.photonEnergyProperty.reset();
       this.runningProperty.reset();
     }
 
-  } ); // inherit
-
-} ); // define
+  } );
+  
+  export default LightPropagationModel;

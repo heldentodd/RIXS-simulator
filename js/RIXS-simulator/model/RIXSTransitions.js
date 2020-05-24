@@ -5,19 +5,13 @@
  *
  * @author Jesse Greenberg - modified by Todd Holden (QCC) - from RS/common/model/AtomSpace.js
  */
-define( function( require ) {
-  'use strict';
 
   // modules
- // var Photon = require( 'RIXS_SIMULATOR/RIXS-simulator/model/Photon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  var Vector2 = require( 'DOT/Vector2' );
-
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+   
   /**
    * Constructor.
-   * @param {Bounds2} bounds
-   * @param {Object} options
    */
   function RIXSTransitions( ) {
 
@@ -30,7 +24,7 @@ define( function( require ) {
 
   rixsSimulator.register( 'RIXSTransitions', RIXSTransitions );
 
-  return inherit( Object, RIXSTransitions, {
+  inherit( Object, RIXSTransitions, {
 
     /**
      * Add an upward transition arrow
@@ -39,7 +33,7 @@ define( function( require ) {
      * @public
      */
     addTransition: function( typeIndex ) { //typeIndex 1 = z2, 2=xz/yz, 3=xy, 4=CT, 5=magnon, 6=elastic
-      var transition = {xPosition:Math.random(), timeLeft:2, decayType:typeIndex};
+      const transition = {xPosition:phet.joist.random.nextDouble(), timeLeft:2, decayType:typeIndex};
       this.transitions.push( transition );
     },
 
@@ -49,7 +43,7 @@ define( function( require ) {
      * @public
      */
     removeTransition: function( transition ) { //ToDo, can probably just keep the most recent 30 instead
-      var index = this.transitions.indexOf( transition );
+      const index = this.transitions.indexOf( transition );
       if ( index > -1 ) {
         this.transitions.splice( index, 1 );
       }
@@ -68,19 +62,13 @@ define( function( require ) {
      */
     updateTransitions: function( dt ) {
       // update transition state
-      var removed = 0;
-      self = this;
-    //  console.log(this.transitions);
-      this.transitions.forEach( function (transition) {
-        transition.timeLeft -= dt;
-     //   console.log(transition.timeLeft);
-        if (transition.timeLeft <= 0) {
-     //     console.log(self.transitions);
-          self.removeTransition(transition);
-     //     console.log(self.transitions);
-     //     removed += 1;
+      for( let i = 0 ; i < this.transitions.length ; i++ ) {
+        this.transitions[i].timeLeft -= dt;
+        if (this.transitions[i].timeLeft <= 0) {
+          this.removeTransition(this.transitions[i]);
         }
-      });
-    },
+      }
+    }
   } );
-} ); // define
+
+  export default RIXSTransitions;

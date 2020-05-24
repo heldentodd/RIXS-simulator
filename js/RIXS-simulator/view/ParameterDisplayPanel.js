@@ -5,49 +5,37 @@
  *
  * @author Todd Holden (QCC of CUNY)
  */
-define( function( require ) {
-  'use strict';
 
   // modules
-  const Color = require( 'SCENERY/util/Color' );
-  var Dimension2 = require( 'DOT/Dimension2' );
-  var HSlider = require( 'SUN/HSlider' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
-  var Panel = require( 'SUN/Panel' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Range = require( 'DOT/Range' );
-  var RichText = require( 'SCENERY/nodes/RichText' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  const RIXSColorProfile = require( 'RIXS_SIMULATOR/RIXS-simulator/view/RIXSColorProfile' );
-  const RIXSConstants = require( 'RIXS_SIMULATOR/RIXSConstants' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  const Util = require( 'DOT/Util' );
-  
+  import Color from '../../../../scenery/js/util/Color.js';
+  import inherit from '../../../../phet-core/js/inherit.js';
+  import merge from '../../../../phet-core/js/merge.js';
+  import Node from '../../../../scenery/js/nodes/Node.js';
+  import Panel from '../../../../sun/js/Panel.js';
+  import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+  import RichText from '../../../../scenery/js/nodes/RichText.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import rixsSimulatorStrings from '../../rixsSimulatorStrings.js';
+  import Utils from '../../../../dot/js/Utils.js';
+
   // strings
-  const photonEnergyString = require( 'string!RIXS_SIMULATOR/photonEnergy' );
-  const energyUnitsString = require( 'string!RIXS_SIMULATOR/energyUnits' );
-  const angleUnitsString = require( 'string!RIXS_SIMULATOR/angleUnits' );
-  const wnUnitsString = require( 'string!RIXS_SIMULATOR/wnUnits' );
+  const energyUnitsString = rixsSimulatorStrings.energyUnits;
+  const angleUnitsString = rixsSimulatorStrings.angleUnits;
+  const wnUnitsString = rixsSimulatorStrings.wnUnits;
 
   // constants
   const ENERGY_FONT = new PhetFont( { size: 22, weight: 'bold' } );
-  const TITLE_COLOR = RIXSColorProfile.titlesTextProperty;
-  const ENERGY_COLOR = RIXSColorProfile.energyTextProperty;
   const INSET = 10;
   const LABEL_SPACING = 5;
   
   /**
    * @param {model} model
    * @param {Tandem} tandem
-   * @param {Object} options
    * @constructor
    */
   function ParameterDisplayPanel( model, tandem, options ) {
 
-    options = _.extend( {
+    options = merge( {
       xMargin: 15,
       yMargin: 8,
       fill: '#F0F0F0',
@@ -122,58 +110,42 @@ define( function( require ) {
 
     // Links the current energy to the energy text above the slider
     model.energyProperty.link( energy => {
-      energyText.text = 'Photon Energy=' + Util.toFixed( energy, 0 ) + ' ' + energyUnitsString;
+      energyText.text = 'Photon Energy=' + Utils.toFixed( energy, 0 ) + ' ' + energyUnitsString;
     } );
 
     // Links the current energy to the energy text above the slider
     model.Sample.orientationP.link( angle => {
-      sampleOrientationText.text = 'θ<sub>i</sub>=' + Util.toFixed( 180 - angle * 180 / Math.PI, 0 ) + angleUnitsString;
+      sampleOrientationText.text = 'θ<sub>i</sub>=' + Utils.toFixed( 180 - angle * 180 / Math.PI, 0 ) + angleUnitsString;
     } );
 
     // Links the current energy to the energy text above the slider
     model.detectorAngleProperty.link( angle => {
-      detectorAngleText.text = 'θ<sub>d</sub>=' + Util.toFixed( angle * 180 / Math.PI, 0 ) + angleUnitsString;
+      detectorAngleText.text = 'θ<sub>d</sub>=' + Utils.toFixed( angle * 180 / Math.PI, 0 ) + angleUnitsString;
     } );
 
     // Links the current energy to the energy text above the slider
     model.finalAngleProperty.link( angle => {
-      finalAngleText.text = 'θ<sub>f</sub>=' + Util.toFixed( angle * 180 / Math.PI, 0 ) + angleUnitsString;
+      finalAngleText.text = 'θ<sub>f</sub>=' + Utils.toFixed( angle * 180 / Math.PI, 0 ) + angleUnitsString;
     } );
 
     // Links the current energy to the energy text above the slider
     model.Sample.anglePhiProperty.link( angle => {
-      anglePhiText.text = 'φ=' + Util.toFixed( angle * 180 / Math.PI, 0 ) + angleUnitsString;
+      anglePhiText.text = 'φ=' + Utils.toFixed( angle * 180 / Math.PI, 0 ) + angleUnitsString;
     } );
 
     // Links the current energy to the energy text above the slider
     model.kProperties.link( kProperties => {
-      var deltaP = kProperties.deltaK.magnitude * 1.0545718E-24;
+      const deltaP = kProperties.deltaK.magnitude * 1.0545718E-24;
       deltaKText.text = 'Photon Δp: ' +  deltaP.toPrecision(2).toString() + ' kg·m/s';
       kProjectionText.text = 'Δk<sub>a</sub>: ' + kProperties.kProjection.x.toPrecision(2) + ' ' + wnUnitsString
                        + '<br>Δk<sub>b</sub>: ' + kProperties.kProjection.y.toPrecision(2) + ' ' + wnUnitsString
-                       + '<br>Δk<sub>c</sub>: ' + kProperties.kProjection.z.toPrecision(2) + ' ' + wnUnitsString ;
-      reciprocolLatticeText.text = 'H: ' + Util.toFixed( kProperties.reciprocolLatticeVector.x, 2 ) 
-                             + '<br>K: ' + Util.toFixed( kProperties.reciprocolLatticeVector.y, 2 ) 
-                             + '<br>L: ' + Util.toFixed( kProperties.reciprocolLatticeVector.z, 2 ) ;     
+                       + '<br>Δk<sub>c</sub>: ' + kProperties.kProjection.z.toPrecision(2) + ' ' + wnUnitsString;
+      reciprocolLatticeText.text = 'H: ' + Utils.toFixed( kProperties.reciprocolLatticeVector.x, 2 )
+                             + '<br>K: ' + Utils.toFixed( kProperties.reciprocolLatticeVector.y, 2 )
+                             + '<br>L: ' + Utils.toFixed( kProperties.reciprocolLatticeVector.z, 2 );
     } );
 
-    /*// Links the current energy to the energy text above the slider
-    model.kProjection.link( kProjection => {
-      kProjectionText.text = 'Δk<sub>a</sub>: ' + kProjection.x.toPrecision(2) + ' ' + wnUnitsString
-                       + '<br>Δk<sub>b</sub>: ' + kProjection.y.toPrecision(2) + ' ' + wnUnitsString
-                       + '<br>Δk<sub>c</sub>: ' + kProjection.z.toPrecision(2) + ' ' + wnUnitsString ;
-    } );*/
-
-    /*/ Links the current energy to the energy text above the slider
-    model.reciprocolLatticeVector.link( reciprocolLattice => {
-      reciprocolLatticeText.text = 'H: ' + Util.toFixed( reciprocolLattice.x, 2 ) 
-                             + '<br>K: ' + Util.toFixed( reciprocolLattice.y, 2 ) 
-                             + '<br>L: ' + Util.toFixed( reciprocolLattice.z, 2 ) ;
-    } );*/
-
-    //this.addChild( energyText );
-
-    var content = new Node();
+    const content = new Node();
     content.addChild( energyText );
     content.addChild( deltaKText );
     content.addChild( sampleOrientationText );
@@ -208,5 +180,5 @@ define( function( require ) {
 
   rixsSimulator.register( 'ParameterDisplayPanel', ParameterDisplayPanel );
 
-  return inherit( Panel, ParameterDisplayPanel );
-} );
+  inherit( Panel, ParameterDisplayPanel );
+  export default ParameterDisplayPanel;

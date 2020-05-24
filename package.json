@@ -13,6 +13,7 @@
     "requirejsNamespace": "RIXS_SIMULATOR",
     "simulation": true,
     "runnable": true,
+    "readmeCreatedManually": true,
     "supportedBrands": [
       "phet",
       "adapted-from-phet"

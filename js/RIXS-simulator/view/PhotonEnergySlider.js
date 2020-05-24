@@ -7,29 +7,29 @@
  * @author Martin Veillette (Berea College)
  * @author Arnab Purkayastha
  */
-define( require => {
-  'use strict';
 
   // modules
-  const RIXSColorProfile = require( 'RIXS_SIMULATOR/RIXS-simulator/view/RIXSColorProfile' );
-  const RIXSConstants = require( 'RIXS_SIMULATOR/RIXSConstants' );
-  const rixsSimulator = require( 'RIXS_SIMULATOR/rixsSimulator' );
-  const Dimension2 = require( 'DOT/Dimension2' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const Path = require( 'SCENERY/nodes/Path' );
-  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const Shape = require( 'KITE/Shape' );
-  const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  const Tandem = require( 'TANDEM/Tandem' );
-  const Text = require( 'SCENERY/nodes/Text' );
-  const VerticalEnergyDisplay = require( 'RIXS_SIMULATOR/RIXS-simulator/view/VerticalEnergyDisplay' );
-  const TriangleSliderThumb = require( 'RIXS_SIMULATOR/RIXS-simulator/view/TriangleSliderThumb' );
-  const Util = require( 'DOT/Util' );
+  import Dimension2 from '../../../../dot/js/Dimension2.js';
+  import merge from '../../../../phet-core/js/merge.js';
+  import Node from '../../../../scenery/js/nodes/Node.js';
+  import Path from '../../../../scenery/js/nodes/Path.js';
+  import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+  import rixsSimulator from '../../rixsSimulator.js';
+  import rixsSimulatorStrings from '../../rixsSimulatorStrings.js';
+  import RIXSColorProfile from './RIXSColorProfile.js';
+  import RIXSConstants from '../RIXSConstants.js';
+  import Shape from '../../../../kite/js/Shape.js';
+  import SimpleDragHandler from '../../../../scenery/js/input/SimpleDragHandler.js';
+  import Tandem from '../../../../tandem/js/Tandem.js';
+  import Text from '../../../../scenery/js/nodes/Text.js';
+  import VerticalEnergyDisplay from './VerticalEnergyDisplay.js';
+  import TriangleSliderThumb from './TriangleSliderThumb.js';
+  import Utils from '../../../../dot/js/Utils.js';
 
   // string
-  const kEdgeString = require( 'string!RIXS_SIMULATOR/kEdge' );
-  const lEdgeString = require( 'string!RIXS_SIMULATOR/lEdge' );
-  const mEdgeString = require( 'string!RIXS_SIMULATOR/mEdge' );
+  const kEdgeString = rixsSimulatorStrings.kEdge;
+  const lEdgeString = rixsSimulatorStrings.lEdge;
+  const mEdgeString = rixsSimulatorStrings.mEdge;
   
   // constants
   const TICK_MARKS = [
@@ -47,7 +47,7 @@ define( require => {
      */
     constructor( energyProperty, options ) {
 
-      options = _.extend( {
+      options = merge( {
         minEnergy: RIXSConstants.minEnergy,
         maxEnergy: RIXSConstants.maxEnergy,
         bulbDiameter: 20,
@@ -95,8 +95,8 @@ define( require => {
           const y = this.triangleNode.globalToParentPoint( event.pointer.point ).y - clickYOffset;
 
           // Clamp to make sure energy Property is within graph bounds
-          energyProperty.value = Util.clamp(
-            Util.roundToInterval( this.yPosToEnergy( -y ), options.snapInterval ),
+          energyProperty.value = Utils.clamp(
+            Utils.roundToInterval( this.yPosToEnergy( -y ), options.snapInterval ),
             options.minEnergy,
             options.maxEnergy
           );
@@ -129,7 +129,6 @@ define( require => {
     /**
      * Creates a labeled tick mark.
      * @param {number} tickMarkIndex
-     * @param {Object} options - options that were provided to PhotonEnergySlider constructor
      * @returns {Node}
      * @private
      */
@@ -184,5 +183,5 @@ define( require => {
     get thermometerCenterXFromRight() { return this._thermometerCenterXFromRight; }
   }
 
-  return rixsSimulator.register( 'PhotonEnergySlider', PhotonEnergySlider );
-} );
+  rixsSimulator.register( 'PhotonEnergySlider', PhotonEnergySlider );
+  export default PhotonEnergySlider;
